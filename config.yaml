@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------
+# Configuration for the C-MAPSS engine health-stage classifier
+# ---------------------------------------------------------------
+seed: 42
+
+data:
+  dir: data/raw          # folder containing train_FD001.txt, test_FD001.txt, RUL_FD001.txt ...
+  subset: FD001          # FD001 | FD002 | FD003 | FD004
+
+labeling:
+  # "rul"           -> thresholds are in cycles of Remaining Useful Life
+  # "life_fraction" -> thresholds are fractions of total life consumed (0-1)
+  method: rul
+  rul_thresholds: [30, 75, 125]          # <=30 Critical, <=75 Warning, <=125 Degrading, >125 Healthy
+  life_fraction_thresholds: [0.50, 0.75, 0.90]   # <=50% Healthy, <=75% Degrading, <=90% Warning, >90% Critical
+  stage_names: [Healthy, Degrading, Warning, Critical]   # ordered from healthiest to worst
+
+preprocessing:
+  n_conditions: auto     # "auto" detects operating regimes (1 for FD001/3, 6 for FD002/4) or give an int
+
+features:
+  windows: [10, 30, 50, 80]   # rolling windows (cycles) for mean / std / delta features (long windows matter!)
+  include_cycle: true    # use the cycle counter as a feature
+
+model:
+  name: logistic_regression      # best in CV on all four subsets; others: random_forest | hist_gradient_boosting | xgboost
+  candidates: [random_forest, hist_gradient_boosting, logistic_regression]   # used by --compare
+
+cv:
+  n_splits: 5            # GroupKFold by engine (no leakage between cycles of the same engine)
+
+output:
+  model_path: models/health_model_{subset}.joblib   # {subset} is filled in automatically
+  reports_dir: reports

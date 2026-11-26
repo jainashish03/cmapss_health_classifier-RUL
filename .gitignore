@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+data/raw/*
+data/synthetic/
+models/*.joblib
+!data/raw/.gitkeep

@@ -1,0 +1,16 @@
+[1/5] Loading FD001 ...
+      train: 20631 rows / 100 engines | test: 13096 rows / 100 engines
+      train class balance: {'Healthy': '38.9%', 'Degrading': '24.2%', 'Warning': '21.8%', 'Critical': '15.0%'}
+[2/5] Cross-validating ['random_forest', 'hist_gradient_boosting', 'logistic_regression'] (5-fold, grouped by engine)
+  CV random_forest            macro-F1 0.7805 ± 0.0199 | acc 0.7691 | 194.2s
+  CV hist_gradient_boosting   macro-F1 0.7872 ± 0.0243 | acc 0.7771 | 467.2s
+  CV logistic_regression      macro-F1 0.8303 ± 0.0135 | acc 0.8194 | 24.8s
+      best model: logistic_regression
+[3/5] Fitting final model 'logistic_regression' on all training engines ...
+      operating conditions: 1 | sensors kept: 15 | features: 196
+[4/5] Evaluating on the official test set ...
+      last cycle / engine (official protocol)  acc 0.810 | macro-F1 0.787 | adjacent-acc 1.000 (n=100)
+      all test cycles                          acc 0.825 | macro-F1 0.828 | adjacent-acc 0.999 (n=13096)
+[5/5] Saving model, metrics and figures ...
+      model  -> /home/claude/cmapss-health-classifier/models/health_model_FD001.joblib
+      report -> /home/claude/cmapss-health-classifier/reports
